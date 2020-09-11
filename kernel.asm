@@ -21,6 +21,9 @@ EnableA20:
   ret
 
 [bits 32]
+%include "cpu.asm"
+%include "memory.asm"
+
 StartProtectedMode:
   mov ax, dataseg
   mov ds, ax
@@ -28,5 +31,16 @@ StartProtectedMode:
   mov es, ax
   mov fs, ax
   mov gs, ax
-  mov [0xb8000], byte 'N'
+  call DetectCPUID
+  call DetectLongMode
+  call SetupIdentityPaging
+  call EditGDT
+  jmp codeseg:Start64BitMode
+
+[bits 64]
+Start64BitMode:
+  mov edi, 0xb8000
+  mov rax, 0x1f201f201f201f20
+  mov ecx, 500
+  rep stosq
   jmp $
