@@ -1,5 +1,7 @@
+#include "video.c"
+#include "stdio.c"
+
 void kernel_main() {
-    int* ptr = (int*)0xb8000;
-    *ptr = 0x50505050;
+    SetCursorPosition(74);
     return;
 }
