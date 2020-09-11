@@ -7,10 +7,9 @@ boot.bin:  boot.asm
 kernela.o:  kernel.asm
 	nasm kernel.asm -f elf64 -o kernela.o
 kernelc.o:  kernel.c
-	~/opt/cross/bin/x86_64-elf-gcc -ffreestanding -mno-red-zone -m64 -c "kernel.c" -o "kernelc.o"
+	~/opt/cross/bin/x86_64-elf-gcc -Ttext 0x8000 -ffreestanding -mno-red-zone -m64 -c "kernel.c" -o "kernelc.o"
 kernel.bin:  kernela.o kernelc.o
-	~/opt/cross/bin/x86_64-elf-ld -o kernel.tmp -Ttext 0x7e00 kernela.o kernelc.o
-	~/opt/cross/bin/x86_64-elf-objcopy -O binary kernel.tmp kernel.bin
+	~/opt/cross/bin/x86_64-elf-ld -T "linker.ld"
 os.bin:  boot.bin kernel.bin
 	cat boot.bin kernel.bin > os.bin
 install:  os.bin
