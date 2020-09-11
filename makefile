@@ -6,8 +6,8 @@ boot.bin:  boot.asm
 	nasm boot.asm -f bin -o boot.bin
 kernela.o:  kernel.asm
 	nasm kernel.asm -f elf64 -o kernela.o
-kernelc.o:  kernel.c
-	~/opt/cross/bin/x86_64-elf-gcc -Ttext 0x8000 -ffreestanding -mno-red-zone -m64 -c "kernel.c" -o "kernelc.o"
+kernelc.o:  kernel.cpp
+	~/opt/cross/bin/x86_64-elf-gcc -Ttext 0x8000 -ffreestanding -mno-red-zone -m64 -c "kernel.cpp" -o "kernelc.o"
 kernel.bin:  kernela.o kernelc.o
 	~/opt/cross/bin/x86_64-elf-ld -T "linker.ld"
 os.bin:  boot.bin kernel.bin
